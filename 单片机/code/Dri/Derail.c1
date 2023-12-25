@@ -1,0 +1,49 @@
+#include "KeyBorad.h"
+
+//有bug，不稳定
+bit Int_KeyBoard_IsSWxPressed(char SWx)
+{
+    //这里虽然实质用的是SW1/2/3/4，但代码中的写法一直都是SWx，无法完成替换；
+    //若是写的是SW1，无论如何，大约每隔10ms再次检测SW1的状态
+    //SWx传入的值永远不会再改变，传入值若为0，并且return 1在while(1)之外，则永远无法结束该循环
+    
+    // 如果没有按下，返回0
+    if (SWx) return 0;
+
+    Util_Delay1MS(10);
+    // 10ms后再次判断，是否一样处于没有按下
+    if (SWx) return 0;
+
+    // 被按下后，循环检查是否被释放
+    while (1)
+    {
+        if (SWx)
+        {
+            Util_Delay1MS(10);
+            if (SWx)
+                break;
+        }
+        return 1;
+    }
+}
+
+bit Int_KeyBoard_IsSW1Pressed()
+{
+    return Int_KeyBoard_IsSWxPressed(SW1);
+
+}
+
+bit Int_KeyBoard_IsSW2Pressed()
+{
+    return Int_KeyBoard_IsSWxPressed(SW2);
+}
+
+bit Int_KeyBoard_IsSW3Pressed()
+{
+    return Int_KeyBoard_IsSWxPressed(SW3);
+}
+
+bit Int_KeyBoard_IsSW4Pressed()
+{
+    return Int_KeyBoard_IsSWxPressed(SW4);
+}
